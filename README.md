@@ -1,5 +1,6 @@
 # perceptron-art
 Project for COGS 300.
+This project is built using [p5.js](https://p5js.org/) and based off of Daniel Shiffman's ["The Nature of Code"](https://natureofcode.com/book/chapter-10-neural-networks/).
 
 ### Running Locally
 - Make sure you have [Node.js](https://nodejs.org/en/) installed onto your computer.
@@ -7,7 +8,6 @@ Project for COGS 300.
 - To make sure you have everything installed locally that this project uses, run:
 ```
 npm i
-
 ```
 - To run this project / develop locally:
 ```
