@@ -20,5 +20,8 @@ Navigate to http://localhost:3000/
 - [x] Figure out tech stack / base code
 - [ ] Determine what the Perceptron should 'learn'
     - What do the weights need to be moving to? What is the end goal?
+- [ ] Draw up some visuals so we know what to work towards / what we want it to look like
 - [ ] Figure out how to better integrate perceptron algorithm with output visuals
 - [ ] Experiment on own branches to see what sorts of visuals we can all come up with!
+- [ ] The poster
+- [ ] The final video
