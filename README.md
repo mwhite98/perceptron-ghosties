@@ -8,6 +8,8 @@ This project is built using [p5.js](https://p5js.org/) and based off of Daniel S
 - To make sure you have everything installed locally that this project uses, run:
 ```
 npm i
+(Also if you don't have brower-sync:
+npm install -g browser-sync)
 ```
 - To run this project / develop locally:
 ```
