@@ -26,12 +26,19 @@ function f(x) {
   return y;
 }
 
+// function preload() {
+//   loadFont("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+// }
+
 function setup() {
-  let cnv = createCanvas(600, 600);
+  let cnv = createCanvas(600, 600, WEBGL);
   cnv.mousePressed(userStartAudio);
   textAlign(CENTER);
   mic = new p5.AudioIn();
   mic.start();
+
+  let myDiv = createDiv('tap to start');
+  myDiv.style('font-family', 'Inconsolata');
 
   // The perceptron has 3 inputs -- x, y, and bias
   // Second value is "Learning Constant"
@@ -52,7 +59,7 @@ function setup() {
 
 
 function draw() {
-  background(0);
+  background(250);
   fill(255);
   text('tap to start', width/2, 20);
 
@@ -64,16 +71,34 @@ function draw() {
 
   // Draw all the points based on what the Perceptron would "guess"
   // Does not use the "known" correct answer
-  for (let i = 0; i < count; i++) {
-    stroke(255);
-    strokeWeight(1);
-    fill('red');
-    let guess = ptron.feedforward(training[i].input);
-    if (guess > 0) noFill();
+  // for (let i = 0; i < count; i++) {
+  //   stroke(255);
+  //   strokeWeight(1);
+  //   fill('red');
+  //   let guess = ptron.feedforward(training[i].input);
+  //   if (guess > 0) noFill();
 
-    let x = map(training[i].input[0], xmin, xmax, 0, width);
-    let y = map(training[i].input[1], ymin, ymax, height, 0);
+  //   let x = map(training[i].input[0], xmin, xmax, 0, width);
+  //   let y = map(training[i].input[1], ymin, ymax, height, 0);
 
-    ellipse(x, y, volume * 40, volume * 40);
-  }
+  //   ellipse(x, y, volume * 40, volume * 40);
+  // }
+
+  // 3D shape mock-ups
+  // Home base
+  let c = color(255, 204, 0); // Define color 'c'
+  fill(c);
+  noStroke();
+  rect(90, 40, 55, 55);
+
+  // Obstacle
+  normalMaterial();
+  push();
+  rotateZ(frameCount * 0.01);
+  rotateX(frameCount * 0.01);
+  rotateY(frameCount * 0.01);
+  noStroke();
+  sphere(70, 24, 24);
+  pop();
+
 }
