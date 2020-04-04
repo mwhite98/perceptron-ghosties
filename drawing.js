@@ -98,7 +98,7 @@ function draw() {
   rotateX(frameCount * 0.01);
   rotateY(frameCount * 0.01);
   noStroke();
-  sphere(70, 24, 24);
+  sphere(70 + volume * 60, 24, 24);
   pop();
 
 }
