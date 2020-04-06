@@ -7,32 +7,24 @@ let rocket;
 let desired;
 let obstacles;
 let numObstacles = 8;
-// let obstacles;
-// let numObstacles = 1;
-let stopped = false;
+let hitObstacle = false;
+let border_width = 750;
+let border_height = 350;
 
 function makeObstacles() {
   obstacles = new Array(numObstacles);
-  for (let i = 0; i < numObstacles; i++) {
-    obstacles[i] = new p5.Vector(random(width), random(height));
+  let o_width = 5;
+  let o_height = 50;
+  for (let i=0; i < numObstacles; i++) {
+    obstacles[i] = new Obstacle(random(50, border_width), random(50, border_height), o_width, o_height);
   }
 }
 
-// function makeObstacles() {
-//   obstacles = new Array(numObstacles);
-//   let o_width = 10;
-//   let o_height = 100;
-//   for (let i=0; i < numObstacles; i++) {
-//     obstacles[i] = new Obstacle(width/4, height/2 - o_height/2, o_width, o_height);
-//   }
-// }
-
 function setup() {
-  createCanvas(700, 300);
-  desired = new p5.Vector(width - width/8, height/2);
+  createCanvas(800, 400);
+  desired = new p5.Vector(border_width - border_width/8, border_height/2);
   makeObstacles();
-  // makeObstacles();
-  rocket = new Vehicle(obstacles.length, 0, random(height));
+  rocket = new Vehicle(obstacles.length, 0, random(border_height));
 }
 
 function draw() {
@@ -41,20 +33,20 @@ function draw() {
   ellipse(desired.x, desired.y, 36, 36);
 
   // Draw the obstacles
-  for (let i=0; i < numObstacles; i++) {
-    fill('red');
-    ellipse(obstacles[i].x, obstacles[i].y, 16, 16);
+  for (let i = 0; i < obstacles.length; i++) {
+    obstacles[i].display();
+    if (obstacles[i].contains(rocket.position)) {
+      hitObstacle = true;
+    }
   }
 
-  // // Draw the obstacles
-  // for (let i = 0; i < obstacles.length; i++) {
-  //   obstacles[i].display();
-  //   if (obstacles[i].contains(rocket.position)) {
-  //     stopped = true;
-  //   }
-  // }
+  if (rocket.position.x > width || rocket.position.y > height) {
+    fill(50);
+    text("rocket is out of bounds (but it'll be back!)", width/2, 30);
+  }
 
   rocket.steer(obstacles, desired);
-  rocket.update();
+  rocket.update(hitObstacle);
+  hitObstacle = false;
   rocket.display();
 }

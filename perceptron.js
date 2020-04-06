@@ -21,7 +21,6 @@ class Perceptron {
       for (let i = 0; i < this.weights.length; i++) {
         this.weights[i] += this.c * error.x * forces[i].x;
         this.weights[i] += this.c * error.y * forces[i].y;
-        // TODO maybe need --> weights[i] = constrain(weights[i], 0, 1);
       }
     }
   

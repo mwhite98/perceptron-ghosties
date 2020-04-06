@@ -14,12 +14,17 @@ class Vehicle {
     }
 
     // Method to update location
-    update() {
-        // Update velocity
-        this.velocity.add(this.acceleration);
-        // Limit speed
-        this.velocity.limit(this.maxspeed);
-        this.position.add(this.velocity);
+    update(didHit) {
+        if (didHit) {
+            this.velocity = createVector(0, -2);
+            this.position = createVector(0, random(700));
+        } else {
+            // Update velocity
+            this.velocity.add(this.acceleration);
+            // Limit speed
+            this.velocity.limit(this.maxspeed);
+            this.position.add(this.velocity);
+        }
         // Reset acceleration to 0 each cycle
         this.acceleration.mult(0);
     }
@@ -29,7 +34,7 @@ class Vehicle {
     }
       
     repel(obstacle) {
-        var direction = p5.Vector.sub(obstacle, this.position); // A vector pointing from the location to the target
+        var direction = p5.Vector.sub(obstacle.position, this.position); // A vector pointing from the location to the target
         let distance = direction.mag();
         direction.setMag(this.maxspeed);
         let force = -150.0 / (distance * distance);
@@ -47,10 +52,10 @@ class Vehicle {
         // Also determines current closest obstacle to the rocket
         for (let i = 0; i < forces.length; i++) {
             forces[i] = this.repel(obstacles[i]);
-            tempDifference = p5.Vector.sub(obstacles[i], this.position);
+            tempDifference = p5.Vector.sub(obstacles[i].position, this.position);
             if (tempDifference.mag() < difference) {
                 difference = tempDifference.mag();
-                closestObstacle = obstacles[i];
+                closestObstacle = obstacles[i].position;
             }
         }
 

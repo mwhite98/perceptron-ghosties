@@ -3,7 +3,7 @@ Project for COGS 300.
 This project is built using [p5.js](https://p5js.org/) and based off of Daniel Shiffman's ["The Nature of Code"](https://natureofcode.com/book/chapter-10-neural-networks/).
 
 ### TODOs - Friday April 3rd 2020, done by Saturday April 4th
-- [ ] Ray: Vehicle finds square in 2D space
+- [x] Myla: Vehicle finds square in 2D space
     - See example [here.](https://natureofcode.com/book/chapter-10-neural-networks/)
 - [ ] James: Change obstacles for vehicle to render in 3D space rather than 2D.
     - See example [here](https://p5js.org/examples/3d-orbit-control.html) and [here.](https://p5js.org/examples/3d-ray-casting.html)
