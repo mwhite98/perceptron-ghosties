@@ -1,8 +1,6 @@
-// The Nature of Code
-// Daniel Shiffman
-// http://natureofcode.com
-
-// The "Vehicle" class
+/*
+    Base code from "The Nature of Code", Daniel Shiffman, http://natureofcode.com
+*/
 
 class Vehicle {
     constructor(n, x, y) {
@@ -11,7 +9,7 @@ class Vehicle {
         this.velocity = createVector(0, -2);
         this.position = createVector(x, y);
         this.r = 6;
-        this.maxspeed = 5;
+        this.maxspeed = 3;
         this.maxforce = 0.1;
     }
 
@@ -22,47 +20,64 @@ class Vehicle {
         // Limit speed
         this.velocity.limit(this.maxspeed);
         this.position.add(this.velocity);
-        // Reset accelerationelertion to 0 each cycle
+        // Reset acceleration to 0 each cycle
         this.acceleration.mult(0);
     }
 
     applyForce(force) {
-        // We could add mass here if we want A = F / M
         this.acceleration.add(force);
     }
-
-    // A method that calculates a steering force towards a target
-    // STEER = DESIRED MINUS VELOCITY
-    seek(target) {
-
-        var desired = p5.Vector.sub(target, this.position); // A vector pointing from the location to the target
-
-        // Scale to maximum speed
-        desired.setMag(this.maxspeed);
-
-        // Steering = Desired minus velocity
-        var steer = p5.Vector.sub(desired, this.velocity);
-        steer.limit(this.maxforce); // Limit to maximum steering force
-
-        this.applyForce(steer);
-        // TODO might have to just use applyForce
-        return steer;
+      
+    repel(obstacle) {
+        var direction = p5.Vector.sub(obstacle, this.position); // A vector pointing from the location to the target
+        let distance = direction.mag();
+        direction.setMag(this.maxspeed);
+        let force = -150.0 / (distance * distance);
+        direction.mult(force);
+        return direction;
     }
 
-    steer(targets, goal) {
-        let forces = new Array(targets.length);
+    steer(obstacles, goal) {
+        let forces = new Array(obstacles.length);
+        let closestObstacle;
+        let tempDifference;
+        let difference = Infinity;
 
-        for (let i=0; i < forces.length; i++) {
-            forces[i] = this.seek(targets[i]);
+        // Determining repelling forces for all obstacles
+        // Also determines current closest obstacle to the rocket
+        for (let i = 0; i < forces.length; i++) {
+            forces[i] = this.repel(obstacles[i]);
+            tempDifference = p5.Vector.sub(obstacles[i], this.position);
+            if (tempDifference.mag() < difference) {
+                difference = tempDifference.mag();
+                closestObstacle = obstacles[i];
+            }
         }
+
+        // Sets vector for moving towards the end goal
+        let desired = p5.Vector.sub(goal, this.position);
+        let d = desired.mag();
+        if (d < 100) {
+            var m = map(d, 0, 100, 0, this.maxspeed);
+            desired.setMag(m);
+        } else {
+            desired.setMag(this.maxspeed);
+        }
+
+        let steer = p5.Vector.sub(desired, this.velocity);
+        steer.limit(this.maxforce);  // Limit to maximum steering force
+        this.applyForce(steer);
+
         // All the steering forces are inputs
         var result = this.brain.feedforward(forces);
         this.applyForce(result);
 
-        // The brain is trained according to the distance to the centre
-        var desired = createVector(goal.x, goal.y);
-        var error = p5.Vector.sub(desired, this.position);
-        this.brain.train(forces, error);
+        // If you're closer to an obstacle than the end goal, train perceptron!
+        if (desired.mag() > difference) {
+            let error = p5.Vector.sub(closestObstacle, this.position);
+            error = 1 / (error.limit(this.maxforce));
+            this.brain.train(forces, error);
+        }
     }
 
     display() {

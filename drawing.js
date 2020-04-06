@@ -5,31 +5,34 @@
 
 let rocket;
 let desired;
-let targets;
-let numTargets = 11;
 let obstacles;
-let numObstacles = 1;
-
-function makeTargets() {
-  targets = new Array(numTargets);
-  for (let i = 0; i < numTargets; i++) {
-    targets[i] = new p5.Vector(random(width), random(height));
-  }
-}
+let numObstacles = 8;
+// let obstacles;
+// let numObstacles = 1;
+let stopped = false;
 
 function makeObstacles() {
   obstacles = new Array(numObstacles);
-  for (let i=0; i < numObstacles; i++) {
-    obstacles[i] = null;
+  for (let i = 0; i < numObstacles; i++) {
+    obstacles[i] = new p5.Vector(random(width), random(height));
   }
 }
+
+// function makeObstacles() {
+//   obstacles = new Array(numObstacles);
+//   let o_width = 10;
+//   let o_height = 100;
+//   for (let i=0; i < numObstacles; i++) {
+//     obstacles[i] = new Obstacle(width/4, height/2 - o_height/2, o_width, o_height);
+//   }
+// }
 
 function setup() {
   createCanvas(700, 300);
   desired = new p5.Vector(width - width/8, height/2);
-  makeTargets();
   makeObstacles();
-  rocket = new Vehicle(targets.length, 0, random(height));
+  // makeObstacles();
+  rocket = new Vehicle(obstacles.length, 0, random(height));
 }
 
 function draw() {
@@ -37,12 +40,21 @@ function draw() {
   fill('blue');
   ellipse(desired.x, desired.y, 36, 36);
 
-  for (let i=0; i < numTargets; i++) {
+  // Draw the obstacles
+  for (let i=0; i < numObstacles; i++) {
     fill('red');
-    ellipse(targets[i].x, targets[i].y, 16, 16);
+    ellipse(obstacles[i].x, obstacles[i].y, 16, 16);
   }
 
-  rocket.steer(targets, desired);
+  // // Draw the obstacles
+  // for (let i = 0; i < obstacles.length; i++) {
+  //   obstacles[i].display();
+  //   if (obstacles[i].contains(rocket.position)) {
+  //     stopped = true;
+  //   }
+  // }
+
+  rocket.steer(obstacles, desired);
   rocket.update();
   rocket.display();
 }
