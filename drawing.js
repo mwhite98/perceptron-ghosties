@@ -40,7 +40,7 @@ function draw() {
     }
   }
 
-  if (rocket.position.x > width || rocket.position.y > height) {
+  if (rocket.position.x > width || rocket.position.y > height || rocket.position.x < 0 || rocket.position.y < 0) {
     fill(50);
     text("rocket is out of bounds (but it'll be back!)", width/2, 30);
   }
