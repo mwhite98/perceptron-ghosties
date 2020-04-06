@@ -13,13 +13,18 @@ class Obstacle {
       this.h = h;
     }
   
-    display() {
+    display(img) {
       stroke(0);
       fill(175);
       strokeWeight(2);
       rectMode(CORNER);
       rect(this.position.x, this.position.y, this.w, this.h);
     }
+
+    display(img) {
+      let imageSize = 50;
+      image(img, this.position.x - imageSize/2 + 20, this.position.y - imageSize/2 + 20, imageSize - 30, imageSize);
+  }
   
     contains(spot) {
       if (spot.x > this.position.x && spot.x < this.position.x + this.w && spot.y > this.position.y && spot.y < this.position.y + this.h) {

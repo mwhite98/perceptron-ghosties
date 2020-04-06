@@ -85,20 +85,12 @@ class Vehicle {
         }
     }
 
-    display() {
-        // Draw a triangle rotated in the direction of velocity
-        var theta = this.velocity.heading() + PI / 2;
-        fill(127);
-        stroke(200);
-        strokeWeight(1);
+    display(img) {
+        // var theta = this.velocity.heading() + PI / 2;
+        let imageSize = 50;
         push();
-        translate(this.position.x, this.position.y);
-        rotate(theta);
-        beginShape();
-        vertex(0, -this.r * 2);
-        vertex(-this.r, this.r * 2);
-        vertex(this.r, this.r * 2);
-        endShape(CLOSE);
+        // rotate(theta);
+        image(img, this.position.x - imageSize/2, this.position.y - imageSize/2, imageSize, imageSize);
         pop();
     }
 }
