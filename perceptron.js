@@ -2,11 +2,6 @@
 // The Nature of Code
 // http://natureofcode.com
 
-// Simple Perceptron Example
-// See: http://en.wikipedia.org/wiki/Perceptron
-
-// Perceptron Class
-
 // Perceptron is created with n weights and learning constant
 class Perceptron {
     constructor(n, c) {
@@ -14,36 +9,32 @@ class Perceptron {
       this.weights = new Array(n);
       // Start with random weights
       for (let i = 0; i < this.weights.length; i++) {
-        this.weights[i] = random(-1, 1);
+        this.weights[i] = random(0, 1);
       }
       this.c = c; // learning rate/constant
     }
   
     // Function to train the Perceptron
     // Weights are adjusted based on "desired" answer
-    train(inputs, desired) {
-      // Guess the result
-      let guess = this.feedforward(inputs);
-      // Compute the factor for changing the weight based on the error
-      // Error = desired output - guessed output
-      // Note this can only be 0, -2, or 2
-      // Multiply by learning constant
-      let error = desired - guess;
-      // Adjust weights based on weightChange * input
+    train(forces, error) {
+      // Adjust weights based on weightChange * forces
       for (let i = 0; i < this.weights.length; i++) {
-        this.weights[i] += this.c * error * inputs[i];
+        this.weights[i] += this.c * error.x * forces[i].x;
+        this.weights[i] += this.c * error.y * forces[i].y;
+        // TODO maybe need --> weights[i] = constrain(weights[i], 0, 1);
       }
     }
   
     // Guess -1 or 1 based on input values
-    feedforward(inputs) {
+    feedforward(forces) {
       // Sum all values
-      let sum = 0;
+      let sum = new p5.Vector();
       for (let i = 0; i < this.weights.length; i++) {
-        sum += inputs[i] * this.weights[i];
+        forces[i].mult(this.weights[i]);
+        sum.add(forces[i]);
       }
       // Result is sign of the sum, -1 or 1
-      return this.activate(sum);
+      return sum;
     }
   
     activate(sum) {
@@ -55,4 +46,4 @@ class Perceptron {
     getWeights() {
       return this.weights;
     }
-  }
+}

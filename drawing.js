@@ -1,79 +1,48 @@
 /*
     Base code from "The Nature of Code", Daniel Shiffman, http://natureofcode.com
     Code based on text "Artificial Intelligence", George Luger
-
 */
 
-// A list of points we will use to "train" the perceptron
-let training = new Array(2000);
-// A Perceptron object
-let ptron;
-// Input mic
-let mic;
+let rocket;
+let desired;
+let targets;
+let numTargets = 11;
+let obstacles;
+let numObstacles = 1;
 
-// We will train the perceptron with one "Point" object at a time
-let count = 0;
+function makeTargets() {
+  targets = new Array(numTargets);
+  for (let i = 0; i < numTargets; i++) {
+    targets[i] = new p5.Vector(random(width), random(height));
+  }
+}
 
-// Coordinate space
-let xmin = -1;
-let ymin = -1;
-let xmax = 1;
-let ymax = 1;
-
-// The function to describe a line
-function f(x) {
-  let y = 0.3 * x + 0.4;
-  return y;
+function makeObstacles() {
+  obstacles = new Array(numObstacles);
+  for (let i=0; i < numObstacles; i++) {
+    obstacles[i] = null;
+  }
 }
 
 function setup() {
-  let cnv = createCanvas(600, 600);
-  cnv.mousePressed(userStartAudio);
-  textAlign(CENTER);
-  mic = new p5.AudioIn();
-  mic.start();
-
-  // The perceptron has 3 inputs -- x, y, and bias
-  // Second value is "Learning Constant"
-  ptron = new Perceptron(3, 0.001); // Learning Constant is low just b/c it's fun to watch, this is not necessarily optimal
-
-  // Create a random set of training points and calculate the "known" answer
-  for (let i = 0; i < training.length; i++) {
-    let x = random(xmin, xmax);
-    let y = random(ymin, ymax);
-    let answer = 1;
-    if (y < f(x)) answer = -1;
-    training[i] = {
-      input: [x, y, 1],
-      output: answer
-    };
-  }
+  createCanvas(700, 300);
+  desired = new p5.Vector(width - width/8, height/2);
+  makeTargets();
+  makeObstacles();
+  rocket = new Vehicle(targets.length, 0, random(height));
 }
 
-
 function draw() {
-  background(0);
-  fill(255);
-  text('tap to start', width/2, 20);
+  background('pink');
+  fill('blue');
+  ellipse(desired.x, desired.y, 36, 36);
 
-  volume = mic.getLevel();
-
-  // Train the Perceptron with one "training" point at a time
-  ptron.train(training[count].input, training[count].output);
-  count = (count + 1) % training.length;
-
-  // Draw all the points based on what the Perceptron would "guess"
-  // Does not use the "known" correct answer
-  for (let i = 0; i < count; i++) {
-    stroke(255);
-    strokeWeight(1);
+  for (let i=0; i < numTargets; i++) {
     fill('red');
-    let guess = ptron.feedforward(training[i].input);
-    if (guess > 0) noFill();
-
-    let x = map(training[i].input[0], xmin, xmax, 0, width);
-    let y = map(training[i].input[1], ymin, ymax, height, 0);
-
-    ellipse(x, y, volume * 40, volume * 40);
+    ellipse(targets[i].x, targets[i].y, 16, 16);
   }
+
+  rocket.steer(targets, desired);
+  rocket.update();
+  rocket.display();
 }
