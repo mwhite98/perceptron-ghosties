@@ -18,6 +18,7 @@ let ghost_3;
 let ghost_4;
 let frame = 0;
 let displayImage;
+let ghostSong, analyzer;
 
 function makeObstacles(border_width, border_height) {
   obstacles = new Array(numObstacles);
@@ -28,6 +29,12 @@ function makeObstacles(border_width, border_height) {
   }
 }
 
+function canvasPressed() {
+  // playing a sound file on a user gesture
+  // is equivalent to `userStartAudio()`
+  ghostSong.loop();
+}
+
 function preload() {
   ghost_1 = loadImage('assets/ghost_walk0001.png');
   ghost_2 = loadImage('assets/ghost_walk0002.png');
@@ -36,10 +43,20 @@ function preload() {
   haunted_house = loadImage('assets/haunted house.png');
   bkg_image = loadImage('assets/bkg.png');
   obstacle_image = loadImage('assets/ghost_standing0005.png');
+  soundFormats('mp3');
+  ghostSong = loadSound('assets/ghost choir.mp3');
 }
 
 function setup() {
-  createCanvas(1100, 500);
+  let cnv = createCanvas(1100, 500);
+  cnv.mousePressed(canvasPressed);
+
+  // create a new Amplitude analyzer
+  analyzer = new p5.Amplitude();
+
+  // Patch the input to an volume analyzer
+  analyzer.setInput(ghostSong);
+
   let border_width = width - 50;
   let border_height = height - 50;
   desired = new p5.Vector(border_width - border_width/8, border_height/2);
@@ -52,9 +69,11 @@ function draw() {
   let houseSize = 140;
   image(haunted_house, desired.x - houseSize/2, desired.y - houseSize/2, houseSize, houseSize);
 
+  let rms = 1.1 + analyzer.getLevel();
+
   // Draw the obstacles
   for (let i = 0; i < obstacles.length; i++) {
-    obstacles[i].display(obstacle_image);
+    obstacles[i].display(obstacle_image, rms);
     if (obstacles[i].contains(rocket.position)) {
       hitObstacle = true;
     }

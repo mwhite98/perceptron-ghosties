@@ -21,9 +21,9 @@ class Obstacle {
       rect(this.position.x, this.position.y, this.w, this.h);
     }
 
-    display(img) {
+    display(img, rms) {
       let imageSize = 50;
-      image(img, this.position.x - imageSize/2 + 20, this.position.y - imageSize/2 + 20, imageSize - 30, imageSize);
+      image(img, this.position.x - imageSize/2 + 20, this.position.y - imageSize/2 + 20, rms * imageSize - 30, rms * imageSize);
   }
   
     contains(spot) {
