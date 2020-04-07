@@ -11,6 +11,8 @@ class Obstacle {
       this.position = createVector(x, y);
       this.w = w;
       this.h = h;
+      this.imageSize = 50;
+      this.renderedPosition = createVector(x - this.imageSize/2 + 20, y - this.imageSize/2 + 20);
     }
   
     display(img) {
@@ -22,8 +24,7 @@ class Obstacle {
     }
 
     display(img, rms) {
-      let imageSize = 50;
-      image(img, this.position.x - imageSize/2 + 20, this.position.y - imageSize/2 + 20, rms * imageSize - 30, rms * imageSize);
+      image(img, this.position.x - this.imageSize/2 + 20, this.position.y - this.imageSize/2 + 20, rms * this.imageSize - 30, rms * this.imageSize);
   }
   
     contains(spot) {

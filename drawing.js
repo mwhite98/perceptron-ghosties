@@ -6,7 +6,7 @@
 let rocket;
 let desired;
 let obstacles;
-let numObstacles = 8;
+let numObstacles = 9;
 let hitObstacle = false;
 
 let haunted_house;

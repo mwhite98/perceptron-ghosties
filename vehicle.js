@@ -34,7 +34,7 @@ class Vehicle {
     }
       
     repel(obstacle) {
-        var direction = p5.Vector.sub(obstacle.position, this.position); // A vector pointing from the location to the target
+        var direction = p5.Vector.sub(obstacle.renderedPosition, this.position); // A vector pointing from the location to the target
         let distance = direction.mag();
         direction.setMag(this.maxspeed);
         let force = -200.0 / (distance * distance);
